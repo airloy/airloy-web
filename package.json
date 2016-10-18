@@ -1,0 +1,33 @@
+{
+  "name": "airloy-web",
+  "version": "0.9.0",
+  "description": "Airloy implements for web environment",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c build/rollup.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "airloy",
+    "web"
+  ],
+  "author": "Layman <anysome@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anysome/airloy-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anysome/airloy-web/issues"
+  },
+  "homepage": "https://github.com/anysome/airloy-web#readme",
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "1.2.0",
+    "rollup-plugin-async": "1.1.0",
+    "rollup-plugin-babel": "2.6.1"
+  },
+  "dependencies": {
+    "airloy": "^0.9.0",
+    "fingerprintjs2": "1.4.1"
+  }
+}
