@@ -1,5 +1,5 @@
 /**
- * airloy_web v0.9.3
+ * airloy_web v0.9.4
  * (c) 2016 Layman
  * @license MIT
  */
@@ -158,20 +158,6 @@ var createClass = function () {
 
 
 
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
 var get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
   var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -255,6 +241,30 @@ var set = function set(object, property, value, receiver) {
   return value;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
 var BrowserDevice = function (_Device) {
   inherits(BrowserDevice, _Device);
 
@@ -313,8 +323,11 @@ var BrowserEvent = function (_Event) {
     key: 'on',
     value: function on(event, handler) {
       this._events[event] = this._events[event] || [];
-      this._events[event].push(handler);
-      document.body.addEventListener(event, handler, false);
+      var listener = function listener(e) {
+        handler.apply(undefined, toConsumableArray(e.detail));
+      };
+      this._events[event].push(listener);
+      document.body.addEventListener(event, listener, false);
     }
   }, {
     key: 'once',
@@ -322,8 +335,8 @@ var BrowserEvent = function (_Event) {
       var _this2 = this;
 
       this._off(event);
-      var listener = function listener() {
-        handler.apply(undefined, arguments);
+      var listener = function listener(e) {
+        handler.apply(undefined, toConsumableArray(e.detail));
         _this2._off(event);
       };
       this._events[event] = [listener];
@@ -346,7 +359,7 @@ var BrowserEvent = function (_Event) {
         data[_key - 1] = arguments[_key];
       }
 
-      var myEvent = new CustomEvent(event, { detail: _extends({}, data) });
+      var myEvent = new CustomEvent(event, { detail: data });
       document.body.dispatchEvent(myEvent);
     }
   }]);

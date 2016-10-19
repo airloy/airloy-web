@@ -24,14 +24,17 @@ export default class BrowserEvent extends Event {
 
   on(event, handler) {
     this._events[event] = this._events[event] || [];
-    this._events[event].push(handler);
-    document.body.addEventListener(event, handler, false);
+    let listener = (e) => {
+      handler(...e.detail);
+    };
+    this._events[event].push(listener);
+    document.body.addEventListener(event, listener, false);
   }
 
   once(event, handler) {
     this._off(event);
-    let listener = (...args) => {
-      handler(...args);
+    let listener = (e) => {
+      handler(...e.detail);
       this._off(event);
     };
     this._events[event] = [listener];
@@ -48,7 +51,7 @@ export default class BrowserEvent extends Event {
   }
 
   emit(event, ...data) {
-    var myEvent = new CustomEvent(event, {detail:{...data}});
+    var myEvent = new CustomEvent(event, {detail: data});
     document.body.dispatchEvent(myEvent);
   }
 
