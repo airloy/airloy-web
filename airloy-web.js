@@ -264,15 +264,14 @@ var BrowserDevice = function (_Device) {
     var _this = possibleConstructorReturn(this, (BrowserDevice.__proto__ || Object.getPrototypeOf(BrowserDevice)).call(this, args));
 
     _this._identifier = '';
+    var that = _this;
     new Fingerprint2().get(function (result, components) {
-      var _this2 = this;
-
       components.forEach(function (component) {
         if (component.key === 'user_agent') {
-          _this2._identifier = component.value + '^';
+          that._identifier = component.value + '^';
         }
       });
-      this._identifier += result;
+      that._identifier += result;
     });
     return _this;
   }
