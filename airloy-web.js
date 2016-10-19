@@ -1,5 +1,5 @@
 /**
- * airloy-web v0.9.2
+ * airloy_web v0.9.2
  * (c) 2016 Layman
  * @license MIT
  */
