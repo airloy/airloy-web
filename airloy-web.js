@@ -1,15 +1,27 @@
 /**
- * airloy_web v0.9.2
+ * airloy_web v0.9.5
  * (c) 2016 Layman
  * @license MIT
  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('airloy'), require('fingerprintjs2')) :
-  typeof define === 'function' && define.amd ? define(['airloy', 'fingerprintjs2'], factory) :
-  (global.airloy_web = factory(global.airloy,global.Fingerprint2));
-}(this, (function (airloy,Fingerprint2) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('airloy')) :
+  typeof define === 'function' && define.amd ? define(['airloy'], factory) :
+  (global.airloy_web = factory(global.airloy));
+}(this, (function (airloy) { 'use strict';
 
-Fingerprint2 = 'default' in Fingerprint2 ? Fingerprint2['default'] : Fingerprint2;
+function __async(g) {
+  return new Promise(function (s, j) {
+    function c(a, x) {
+      try {
+        var r = g[x ? "throw" : "next"](a);
+      } catch (e) {
+        j(e);return;
+      }r.done ? s(r.value) : Promise.resolve(r.value).then(c, d);
+    }function d(e) {
+      c(e, 1);
+    }c();
+  });
+}
 
 var asyncGenerator = function () {
   function AwaitValue(value) {
@@ -158,20 +170,6 @@ var createClass = function () {
 
 
 
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
 var get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
   var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -255,6 +253,30 @@ var set = function set(object, property, value, receiver) {
   return value;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
 var BrowserDevice = function (_Device) {
   inherits(BrowserDevice, _Device);
 
@@ -263,13 +285,32 @@ var BrowserDevice = function (_Device) {
 
     var _this = possibleConstructorReturn(this, (BrowserDevice.__proto__ || Object.getPrototypeOf(BrowserDevice)).call(this, args));
 
-    new Fingerprint2().get(function (result, components) {
-      this._identifier = result;
-    });
+    _this.init(args.airloy);
     return _this;
   }
 
   createClass(BrowserDevice, [{
+    key: 'init',
+    value: function init(airloy$$1) {return __async(function*(){
+      var id = yield airloy$$1.store.getItem('airloy.device.id');
+      if (id) {
+        this._identifier = id;
+      } else {
+        id = window.navigator.userAgent + '^' + this.createGuid();
+        this._identifier = id;
+        airloy$$1.store.setItem('airloy.device.id', id);
+      }
+    }.call(this))}
+  }, {
+    key: 'createGuid',
+    value: function createGuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+            v = c === 'x' ? r : r & 0x3 | 0x8;
+        return v.toString(16);
+      });
+    }
+  }, {
     key: 'getIdentifier',
     value: function getIdentifier() {
       return this._identifier;
@@ -306,8 +347,11 @@ var BrowserEvent = function (_Event) {
     key: 'on',
     value: function on(event, handler) {
       this._events[event] = this._events[event] || [];
-      this._events[event].push(handler);
-      document.body.addEventListener(event, handler, false);
+      var listener = function listener(e) {
+        handler.apply(undefined, toConsumableArray(e.detail));
+      };
+      this._events[event].push(listener);
+      document.body.addEventListener(event, listener, false);
     }
   }, {
     key: 'once',
@@ -315,8 +359,8 @@ var BrowserEvent = function (_Event) {
       var _this2 = this;
 
       this._off(event);
-      var listener = function listener() {
-        handler.apply(undefined, arguments);
+      var listener = function listener(e) {
+        handler.apply(undefined, toConsumableArray(e.detail));
         _this2._off(event);
       };
       this._events[event] = [listener];
@@ -339,26 +383,12 @@ var BrowserEvent = function (_Event) {
         data[_key - 1] = arguments[_key];
       }
 
-      var myEvent = new CustomEvent(event, { detail: _extends({}, data) });
+      var myEvent = new CustomEvent(event, { detail: data });
       document.body.dispatchEvent(myEvent);
     }
   }]);
   return BrowserEvent;
 }(airloy.Event);
-
-function __async(g) {
-  return new Promise(function (s, j) {
-    function c(a, x) {
-      try {
-        var r = g[x ? "throw" : "next"](a);
-      } catch (e) {
-        j(e);return;
-      }r.done ? s(r.value) : Promise.resolve(r.value).then(c, d);
-    }function d(e) {
-      c(e, 1);
-    }c();
-  });
-}
 
 var storage = window.localStorage || window.sessionStorage;
 
@@ -391,8 +421,8 @@ var BrowserStore = function (_Store) {
 
 var plugin = {
   install: function install(airloy$$1) {
-    airloy$$1.device = new BrowserDevice();
     airloy$$1.store = new BrowserStore();
+    airloy$$1.device = new BrowserDevice({ airloy: airloy$$1 });
     airloy$$1.event = new BrowserEvent();
   }
 };

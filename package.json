@@ -1,6 +1,6 @@
 {
   "name": "airloy-web",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Airloy implements for web environment",
   "main": "airloy-web.js",
   "files": [

@@ -7,12 +7,23 @@ export default class BrowserDevice extends Device {
 
   constructor(args) {
     super(args);
-    this._identifier = window.navigator.userAgent + '^' + this.createGuid();
+    this.init(args.airloy);
+  }
+
+  async init(airloy) {
+    let id = await airloy.store.getItem('airloy.device.id');
+    if (id) {
+      this._identifier = id;
+    } else {
+      id = window.navigator.userAgent + '^' + this.createGuid();
+      this._identifier = id;
+      airloy.store.setItem('airloy.device.id', id);
+    }
   }
 
   createGuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+      var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
