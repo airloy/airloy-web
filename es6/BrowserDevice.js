@@ -2,14 +2,18 @@
  * Created by Layman <anysome@gmail.com> (http://github.com/anysome) on 16/10/18.
  */
 import {Device} from 'airloy';
-import Fingerprint2 from 'fingerprintjs2';
 
 export default class BrowserDevice extends Device {
 
   constructor(args) {
     super(args);
-    new Fingerprint2().get(function(result, components) {
-      this._identifier = result;
+    this._identifier = window.navigator.userAgent + '^' + this.createGuid();
+  }
+
+  createGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
     });
   }
 
