@@ -1,5 +1,5 @@
 /**
- * airloy_web v0.9.5
+ * airloy_web v0.9.6
  * (c) 2016 Layman
  * @license MIT
  */
@@ -8,20 +8,6 @@
   typeof define === 'function' && define.amd ? define(['airloy'], factory) :
   (global.airloy_web = factory(global.airloy));
 }(this, (function (airloy) { 'use strict';
-
-function __async(g) {
-  return new Promise(function (s, j) {
-    function c(a, x) {
-      try {
-        var r = g[x ? "throw" : "next"](a);
-      } catch (e) {
-        j(e);return;
-      }r.done ? s(r.value) : Promise.resolve(r.value).then(c, d);
-    }function d(e) {
-      c(e, 1);
-    }c();
-  });
-}
 
 var asyncGenerator = function () {
   function AwaitValue(value) {
@@ -291,16 +277,15 @@ var BrowserDevice = function (_Device) {
 
   createClass(BrowserDevice, [{
     key: 'init',
-    value: function init(airloy$$1) {return __async(function*(){
-      var id = yield airloy$$1.store.getItem('airloy.device.id');
+    value: function init(airloy$$1) {
+      var id = airloy$$1.store.getItem('airloy.device.id');
       if (id) {
         this._identifier = id;
       } else {
-        id = window.navigator.userAgent + '^' + this.createGuid();
-        this._identifier = id;
-        airloy$$1.store.setItem('airloy.device.id', id);
+        this._identifier = window.navigator.userAgent + '^' + this.createGuid();
+        airloy$$1.store.setItem('airloy.device.id', this._identifier);
       }
-    }.call(this))}
+    }
   }, {
     key: 'createGuid',
     value: function createGuid() {
@@ -402,9 +387,9 @@ var BrowserStore = function (_Store) {
 
   createClass(BrowserStore, [{
     key: 'getItem',
-    value: function getItem(key) {return __async(function*(){
+    value: function getItem(key) {
       return storage.getItem(key);
-    }())}
+    }
   }, {
     key: 'setItem',
     value: function setItem(key, value) {

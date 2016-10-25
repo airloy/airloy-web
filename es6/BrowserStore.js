@@ -2,13 +2,13 @@
  * Created by Layman <anysome@gmail.com> (http://github.com/anysome) on 16/10/19.
  */
 
-import {Store} from 'airloy';
+import {Store} from 'airloy/es6';
 
 let storage = window.localStorage || window.sessionStorage;
 
 export default class BrowserStore extends Store {
 
-  async getItem(key) {
+  getItem(key) {
     return storage.getItem(key);
   }
 

@@ -1,7 +1,7 @@
 /**
  * Created by Layman <anysome@gmail.com> (http://github.com/anysome) on 16/10/18.
  */
-import {Device} from 'airloy';
+import {Device} from 'airloy/es6';
 
 export default class BrowserDevice extends Device {
 
@@ -10,14 +10,13 @@ export default class BrowserDevice extends Device {
     this.init(args.airloy);
   }
 
-  async init(airloy) {
-    let id = await airloy.store.getItem('airloy.device.id');
+  init(airloy) {
+    let id = airloy.store.getItem('airloy.device.id');
     if (id) {
       this._identifier = id;
     } else {
-      id = window.navigator.userAgent + '^' + this.createGuid();
-      this._identifier = id;
-      airloy.store.setItem('airloy.device.id', id);
+      this._identifier = window.navigator.userAgent + '^' + this.createGuid();
+      airloy.store.setItem('airloy.device.id', this._identifier);
     }
   }
 
