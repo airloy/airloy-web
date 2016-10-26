@@ -2,7 +2,7 @@
  * Created by Layman <anysome@gmail.com> (http://github.com/anysome) on 16/10/19.
  */
 
-import {Event} from 'airloy';
+import {Event} from 'airloy/es6';
 
 if (typeof window.CustomEvent !== "function") {
   function CustomEvent ( event, params ) {

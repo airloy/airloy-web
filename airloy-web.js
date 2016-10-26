@@ -1,15 +1,13 @@
 /**
- * airloy_web v0.9.4
+ * airloy_web v0.9.6
  * (c) 2016 Layman
  * @license MIT
  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('airloy'), require('fingerprintjs2')) :
-  typeof define === 'function' && define.amd ? define(['airloy', 'fingerprintjs2'], factory) :
-  (global.airloy_web = factory(global.airloy,global.Fingerprint2));
-}(this, (function (airloy,Fingerprint2) { 'use strict';
-
-Fingerprint2 = 'default' in Fingerprint2 ? Fingerprint2['default'] : Fingerprint2;
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('airloy')) :
+  typeof define === 'function' && define.amd ? define(['airloy'], factory) :
+  (global.airloy_web = factory(global.airloy));
+}(this, (function (airloy) { 'use strict';
 
 var asyncGenerator = function () {
   function AwaitValue(value) {
@@ -273,20 +271,31 @@ var BrowserDevice = function (_Device) {
 
     var _this = possibleConstructorReturn(this, (BrowserDevice.__proto__ || Object.getPrototypeOf(BrowserDevice)).call(this, args));
 
-    _this._identifier = '';
-    var that = _this;
-    new Fingerprint2().get(function (result, components) {
-      components.forEach(function (component) {
-        if (component.key === 'user_agent') {
-          that._identifier = component.value + '^';
-        }
-      });
-      that._identifier += result;
-    });
+    _this.init(args.airloy);
     return _this;
   }
 
   createClass(BrowserDevice, [{
+    key: 'init',
+    value: function init(airloy$$1) {
+      var id = airloy$$1.store.getItem('airloy.device.id');
+      if (id) {
+        this._identifier = id;
+      } else {
+        this._identifier = window.navigator.userAgent + '^' + this.createGuid();
+        airloy$$1.store.setItem('airloy.device.id', this._identifier);
+      }
+    }
+  }, {
+    key: 'createGuid',
+    value: function createGuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+            v = c === 'x' ? r : r & 0x3 | 0x8;
+        return v.toString(16);
+      });
+    }
+  }, {
     key: 'getIdentifier',
     value: function getIdentifier() {
       return this._identifier;
@@ -366,20 +375,6 @@ var BrowserEvent = function (_Event) {
   return BrowserEvent;
 }(airloy.Event);
 
-function __async(g) {
-  return new Promise(function (s, j) {
-    function c(a, x) {
-      try {
-        var r = g[x ? "throw" : "next"](a);
-      } catch (e) {
-        j(e);return;
-      }r.done ? s(r.value) : Promise.resolve(r.value).then(c, d);
-    }function d(e) {
-      c(e, 1);
-    }c();
-  });
-}
-
 var storage = window.localStorage || window.sessionStorage;
 
 var BrowserStore = function (_Store) {
@@ -392,9 +387,9 @@ var BrowserStore = function (_Store) {
 
   createClass(BrowserStore, [{
     key: 'getItem',
-    value: function getItem(key) {return __async(function*(){
+    value: function getItem(key) {
       return storage.getItem(key);
-    }())}
+    }
   }, {
     key: 'setItem',
     value: function setItem(key, value) {
@@ -411,8 +406,8 @@ var BrowserStore = function (_Store) {
 
 var plugin = {
   install: function install(airloy$$1) {
-    airloy$$1.device = new BrowserDevice();
     airloy$$1.store = new BrowserStore();
+    airloy$$1.device = new BrowserDevice({ airloy: airloy$$1 });
     airloy$$1.event = new BrowserEvent();
   }
 };

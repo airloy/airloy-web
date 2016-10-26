@@ -8,8 +8,8 @@ import BrowserStore from './BrowserStore';
 
 let plugin = {
   install(airloy) {
-    airloy.device = new BrowserDevice();
     airloy.store = new BrowserStore();
+    airloy.device = new BrowserDevice({airloy});
     airloy.event = new BrowserEvent();
   }
 };

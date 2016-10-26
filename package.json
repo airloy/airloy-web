@@ -1,6 +1,6 @@
 {
   "name": "airloy-web",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "description": "Airloy implements for web environment",
   "main": "airloy-web.js",
   "files": [
@@ -32,7 +32,6 @@
     "rollup-plugin-babel": "2.6.1"
   },
   "dependencies": {
-    "airloy": "^0.9.3",
-    "fingerprintjs2": "1.4.1"
+    "airloy": "^0.9.4"
   }
 }
