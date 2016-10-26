@@ -11,11 +11,11 @@ module.exports = {
   entry: 'es6/index.js',
   dest: 'airloy-web.js',
   format: 'umd',
-  moduleName: 'airloy_web',
+  moduleName: 'AirloyWeb',
   plugins: [babel(), async()],
   banner:
     `/**
- * airloy_web v${version}
+ * AirloyWeb v${version}
  * (c) ${new Date().getFullYear()} Layman
  * @license MIT
  */`
