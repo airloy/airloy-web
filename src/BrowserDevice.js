@@ -1,7 +1,7 @@
 /**
  * Created by Layman <anysome@gmail.com> (http://github.com/anysome) on 16/10/18.
  */
-import {Device} from 'airloy/es6';
+import {Device} from 'airloy/src';
 
 export default class BrowserDevice extends Device {
 

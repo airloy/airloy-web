@@ -2,7 +2,7 @@
  * Created by Layman <anysome@gmail.com> (http://github.com/anysome) on 16/10/19.
  */
 
-import {Store} from 'airloy/es6';
+import {Store} from 'airloy/src';
 
 let storage = window.localStorage || window.sessionStorage;
 

@@ -1,12 +1,12 @@
 /**
- * airloy_web v0.9.6
+ * AirloyWeb v0.9.8
  * (c) 2016 Layman
  * @license MIT
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('airloy')) :
   typeof define === 'function' && define.amd ? define(['airloy'], factory) :
-  (global.airloy_web = factory(global.airloy));
+  (global.AirloyWeb = factory(global.airloy));
 }(this, (function (airloy) { 'use strict';
 
 var asyncGenerator = function () {

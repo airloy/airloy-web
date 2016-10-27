@@ -8,7 +8,7 @@ import async from 'rollup-plugin-async';
 const version = process.env.VERSION || require('../package.json').version;
 
 module.exports = {
-  entry: 'es6/index.js',
+  entry: 'src/index.js',
   dest: 'airloy-web.js',
   format: 'umd',
   moduleName: 'AirloyWeb',
