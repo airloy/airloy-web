@@ -5,10 +5,12 @@
   "main": "airloy-web.js",
   "files": [
     "src",
-    "airloy-web.js"
+    "airloy-web.js",
+    "airloy-web.min.js"
   ],
   "scripts": {
     "build": "rollup -c build/rollup.config.js",
+    "uglify": "./node_modules/uglify-js/bin/uglifyjs ./airloy-web.js -m -o ./airloy-web.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -29,7 +31,8 @@
     "babel-plugin-transform-object-rest-spread": "6.16.0",
     "babel-preset-es2015-rollup": "1.2.0",
     "rollup-plugin-async": "1.1.0",
-    "rollup-plugin-babel": "2.6.1"
+    "rollup-plugin-babel": "2.6.1",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   },
   "dependencies": {
     "airloy": "^0.9.8"
